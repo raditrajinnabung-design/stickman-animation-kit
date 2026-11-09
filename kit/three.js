@@ -1,18 +1,36 @@
-from dataclasses import dataclass
 
-@dataclass
-class Timeline:
-    fps: int = 30
+import * as THREE from "three";
 
-    def seconds_to_frames(self, seconds: float) -> int:
-        return round(seconds * self.fps)
+export function createScene() {
+  const scene = new THREE.Scene();
 
-    def frames_to_seconds(self, frames: int) -> float:
-        return frames / self.fps
+  scene.background = new THREE.Color("#ffffff");
 
-    def duration(self, start: int, end: int) -> float:
-        return (end - start) / self.fps
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    16 / 9,
+    0.1,
+    1000
+  );
 
+  camera.position.z = 5;
 
-def calculate_frames(duration: float, fps: int = 30) -> int:
-    return round(duration * fps)
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true
+  });
+
+  renderer.setSize(1280, 720);
+
+  const light = new THREE.AmbientLight(0xffffff, 1);
+  scene.add(light);
+
+  return {
+    scene,
+    camera,
+    renderer
+  };
+}
+
+export function animateScene(renderer, scene, camera) {
+  renderer.render(scene, camera);
+}
